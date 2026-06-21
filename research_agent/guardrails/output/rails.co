@@ -1,0 +1,11 @@
+# NeMo Guardrails — Output Rail CoLang Definitions
+#
+# This flow intercepts the bot's generated response and runs a safety check
+# before it reaches the user. If the output is flagged as unsafe, a generic
+# refusal message is returned instead of the actual LLM output.
+
+define subflow self check output
+  $allowed = execute self_check_output
+  if not $allowed
+    bot say "I was unable to generate a safe summary for this query."
+    stop

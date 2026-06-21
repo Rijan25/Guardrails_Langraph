@@ -1,0 +1,53 @@
+# NeMo Guardrails — Input Rail Configuration
+#
+# This config handles INCOMING user messages before any LLM processing.
+# It uses the self_check_input flow (defined in rails.co) to detect unsafe
+# or off-topic queries and block them before they hit the planner node.
+#
+# FastEmbed (all-MiniLM-L6-v2) is used for intent-matching embeddings —
+# it runs locally with no external embedding API needed.
+
+models:
+  - type: embeddings
+    engine: fastembed
+    model: all-MiniLM-L6-v2
+
+rails:
+  input:
+    flows:
+      - self check input
+
+instructions:
+  - type: general
+    content: |
+      You are a helpful research assistant. You help users find and synthesize
+      information on a wide range of topics. You refuse requests for harmful,
+      illegal, or clearly off-topic content (e.g., jokes, small talk).
+
+      When checking if user input is appropriate, respond with "yes" if the
+      request is a legitimate research question, and "no" if it is harmful,
+      requests illegal information, or is completely off-topic.
+
+prompts:
+  - task: self_check_input
+    content: |
+      Your task is to check if the user message below violates the policy for a research assistant bot.
+
+      Answer "yes" if the message is problematic (should be BLOCKED):
+      - Requests for step-by-step instructions to hack, attack, or compromise computer systems
+      - Requests for instructions to make weapons, synthesize drugs, or cause physical harm
+      - Requests to do something clearly illegal
+
+      Answer "no" if the message is acceptable (should be ALLOWED):
+      - Questions about science, technology, history, economics, medicine, or any factual topic
+      - Requests to explain, summarize, or research information on any topic
+      - General knowledge questions, even about sensitive topics discussed academically
+
+      User message: "{{ user_input }}"
+
+      Is this message problematic and should be blocked?
+      Answer only "yes" (block) or "no" (allow):
+      Answer:
+
+single_call:
+  enabled: false

@@ -1,0 +1,50 @@
+# NeMo Guardrails — Output Rail Configuration
+#
+# This config validates LLM-generated summaries BEFORE they are returned to the user.
+# The self_check_output flow (defined in rails.co) uses a secondary LLM call to
+# verify the output doesn't contain harmful, biased, or factually problematic content.
+#
+# Placed on the summarizer node — the last step before the user sees anything.
+
+models:
+  - type: embeddings
+    engine: fastembed
+    model: all-MiniLM-L6-v2
+
+rails:
+  output:
+    flows:
+      - self check output
+
+instructions:
+  - type: general
+    content: |
+      You are a helpful research assistant that provides accurate, balanced
+      summaries. When checking output, respond with "yes" if the response is
+      appropriate, factual, and helpful, and "no" if it contains harmful content,
+      dangerous instructions, or significant misinformation.
+
+prompts:
+  - task: self_check_output
+    content: |
+      Your task is to check if the bot response below violates the safety policy.
+
+      Answer "yes" if the response is problematic (should be BLOCKED):
+      - Provides specific step-by-step instructions to hack, attack, or compromise computer systems
+      - Provides instructions to create weapons, synthesize illegal drugs, or cause physical harm
+      - Contains dangerous misinformation that could directly cause harm
+
+      Answer "no" if the response is acceptable (should be ALLOWED):
+      - Provides factual, educational information on any topic
+      - Discusses sensitive topics academically (explaining how attacks work at a conceptual level is fine)
+      - Explains consequences or risks of actions without providing operational instructions
+
+      User message: "{{ user_input }}"
+      Bot response: "{{ bot_response }}"
+
+      Is this response problematic and should be blocked?
+      Answer only "yes" (block) or "no" (allow):
+      Answer:
+
+single_call:
+  enabled: false

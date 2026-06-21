@@ -1,0 +1,68 @@
+# NeMo Guardrails — Input Rail CoLang Definitions
+#
+# This file defines the intents and flows NeMo uses to classify incoming messages.
+# Intent detection uses embedding similarity against the example utterances below.
+#
+# Flows:
+# - "ask research question" → allowed through to the planner
+# - "express greeting" → short-circuit with a polite greeting response
+# - "ask off topic" → short-circuit with a refusal
+# - "self check input" → safety classifier that sets $allowed = True/False
+
+# ---------------------------------------------------------------------------
+# Intents
+# ---------------------------------------------------------------------------
+
+define user ask research question
+  "What are the latest developments in quantum computing?"
+  "Tell me about climate change impacts"
+  "What caused the 2008 financial crisis?"
+  "Explain machine learning in simple terms"
+  "What is the current state of fusion energy research?"
+  "Summarize recent AI breakthroughs"
+  "What are the health effects of microplastics?"
+
+define user express greeting
+  "Hello"
+  "Hi there"
+  "Hey"
+  "Good morning"
+  "What's up?"
+  "Howdy"
+
+define user ask off topic
+  "Tell me a joke"
+  "What's your favorite movie?"
+  "Can you write me a poem?"
+  "Let's play a game"
+  "What did you have for breakfast?"
+  "Sing me a song"
+
+define bot answer research question
+  "I'll research that for you now."
+
+define bot offer help
+  "Hello! I'm a research assistant. I can help you find and synthesize information on a wide range of topics. What would you like to know?"
+
+define bot refuse off topic
+  "I'm a research assistant and can only help with research questions. Please ask me about a topic you'd like me to investigate."
+
+# ---------------------------------------------------------------------------
+# Flows
+# ---------------------------------------------------------------------------
+
+define flow greeting
+  user express greeting
+  bot offer help
+  stop
+
+define flow off topic
+  user ask off topic
+  bot refuse off topic
+  stop
+
+define subflow self check input
+  $allowed = execute self_check_input
+  if not $allowed
+    bot refuse off topic
+    stop
