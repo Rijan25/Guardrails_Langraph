@@ -23,7 +23,7 @@ from langchain_groq import ChatGroq
 from nemoguardrails import RailsConfig, LLMRails
 from nemoguardrails.rails.llm.options import RailStatus, RailType
 
-from research_agent.state import ResearchState
+from state import ResearchState
 
 INPUT_CONFIG_DIR = Path(__file__).parent.parent / "guardrails" / "input"
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")

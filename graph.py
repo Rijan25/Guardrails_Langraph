@@ -12,11 +12,11 @@ The conditional edge after input_guard routes based on state["is_safe"]:
 
 from langgraph.graph import StateGraph, END
 
-from research_agent.state import ResearchState
-from research_agent.nodes.input_guard import input_guard_node
-from research_agent.nodes.planner import planner_node
-from research_agent.nodes.searcher import searcher_node
-from research_agent.nodes.summarizer import summarizer_node
+from state import ResearchState
+from nodes.input_guard import input_guard_node
+from nodes.planner import planner_node
+from nodes.searcher import searcher_node
+from nodes.summarizer import summarizer_node
 
 
 def route_after_guard(state: ResearchState) -> str:

@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent / ".env")
 
-from research_agent.graph import build_graph
-from research_agent.state import ResearchState
+from graph import build_graph
+from state import ResearchState
 
 
 TEST_QUERIES = [

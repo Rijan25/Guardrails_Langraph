@@ -18,7 +18,7 @@ import json
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from research_agent.state import ResearchState
+from state import ResearchState
 
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 

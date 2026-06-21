@@ -14,8 +14,8 @@ WHY THIS NODE EXISTS:
 
 import asyncio
 
-from research_agent.state import ResearchState
-from research_agent.tools.search import search_web
+from state import ResearchState
+from tools.search import search_web
 
 
 async def searcher_node(state: ResearchState) -> dict:
