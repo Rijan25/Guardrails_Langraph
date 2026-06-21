@@ -1,2 +1,6 @@
 BLOG_POST.md
-research_agent\.env
+research_agent/.env
+.env
+__pycache__/
+*.pyc
+*.pyo
