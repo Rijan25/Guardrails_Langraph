@@ -49,15 +49,20 @@ Final Answer
 ## Project Structure
 
 ```
-research_agent/
+Guardrails_Langraph/            ← repo root
+├── .env.example
+├── .gitignore
+├── README.md
+├── __init__.py
 ├── state.py                    # ResearchState TypedDict
 ├── graph.py                    # LangGraph graph + conditional routing
 ├── main.py                     # Entry point
+├── requirements.txt
 ├── nodes/
 │   ├── input_guard.py          # NeMo input safety check
 │   ├── planner.py              # Query decomposition
 │   ├── searcher.py             # Concurrent web search
-│   └── summarizer.py          # Synthesis + NeMo output check
+│   └── summarizer.py           # Synthesis + NeMo output check
 ├── guardrails/
 │   ├── input/
 │   │   ├── config.yml          # Input rail config + prompt
@@ -65,10 +70,8 @@ research_agent/
 │   └── output/
 │       ├── config.yml          # Output rail config + prompt
 │       └── rails.co            # CoLang output safety flow
-├── tools/
-│   └── search.py               # Tavily wrapper with mock fallback
-├── requirements.txt
-└── .env.example
+└── tools/
+    └── search.py               # Tavily wrapper with mock fallback
 ```
 
 ---
@@ -78,13 +81,13 @@ research_agent/
 ### 1. Install dependencies
 
 ```bash
-pip install -r research_agent/requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 2. Set API keys
 
 ```bash
-cp research_agent/.env.example research_agent/.env
+cp .env.example .env
 ```
 
 Edit `.env`:
@@ -97,8 +100,7 @@ TAVILY_API_KEY=your_key_here      # optional — uses mock results if not set
 ### 3. Run
 
 ```bash
-# From the guardrails/ directory
-python -m research_agent.main
+python main.py
 ```
 
 ---
@@ -107,13 +109,13 @@ python -m research_agent.main
 
 ```bash
 # Default: runs 3 demo test cases, then opens interactive chat
-python -m research_agent.main
+python main.py
 
 # Interactive chat only (skip demos)
-python -m research_agent.main --chat
+python main.py --chat
 
 # Demo test cases only, then exit
-python -m research_agent.main --demo
+python main.py --demo
 ```
 
 ### Interactive Commands
